@@ -50,7 +50,7 @@ transform.N.replacement=<the string to use as a replacement, e.g. '\\{$1\\}'. Ma
 Examples
 --------
 
-See https://github.com/demobox/mustachifier/src/test/resources/mustachifier.properties for examples.
+See https://github.com/demobox/mustachifier/blob/master/src/test/resources/mustachifier.properties for examples.
 
 Usage
 =====
