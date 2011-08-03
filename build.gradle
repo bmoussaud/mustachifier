@@ -47,10 +47,6 @@ task jarWithDeps(type: Jar, dependsOn: classes) {
 		exclude truezipSpiFile
 	}
 	from mergeDir
-
-  manifest {
-  	attributes 'Main-Class': 'com.xebialabs.deployit.overthere.ConnectionChecker'
-  }
 }
 
 private def mergeFiles(targetDir, fileTrees, relativePath) {
