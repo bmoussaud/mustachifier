@@ -19,7 +19,6 @@ dependencies {
   compile "de.schlichtherle.truezip:truezip-file:${trueZipVersion}"
   runtime "de.schlichtherle.truezip:truezip-driver-zip:${trueZipVersion}"
   testCompile 'junit:junit:4.8.2'
-  //testCompile 'com.qrmedia.commons:commons-lang:1.0.2'
 }
 
 localNexusBaseUrl = 'http://localhost:8081/nexus/content'
