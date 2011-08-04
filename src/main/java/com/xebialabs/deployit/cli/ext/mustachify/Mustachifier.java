@@ -9,6 +9,7 @@ import static com.xebialabs.deployit.cli.ext.mustachify.collect.Maps2.fromKeys;
 import static com.xebialabs.deployit.cli.ext.mustachify.collect.Maps2.transformKeys;
 import static com.xebialabs.deployit.cli.ext.mustachify.dar.DarReader.checkValidDar;
 import static com.xebialabs.deployit.cli.ext.mustachify.dar.DarReader.getManifest;
+import static com.xebialabs.deployit.cli.ext.mustachify.io.Files2.getTempFilePath;
 import static java.lang.String.format;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.apache.commons.io.FilenameUtils.getExtension;
@@ -79,9 +80,8 @@ public class Mustachifier {
     }
     
     public File convert(String sourcePath) throws IOException {
-        File target = File.createTempFile(getBaseName(sourcePath), 
-                "-dar." + getExtension(sourcePath));
-        return convert(sourcePath, target);
+        return convert(sourcePath, getTempFilePath(
+                getBaseName(sourcePath), "-dar." + getExtension(sourcePath)));
     }
     
     public File convert(String sourcePath, String targetPath) throws IOException {
