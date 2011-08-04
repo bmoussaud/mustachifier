@@ -42,6 +42,6 @@ public class DarWriter {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Flushing changes to DAR '{}'", dar);
         }
-        TFile.umount();
+        TFile.umount(new TFile(dar));
     }
 }
