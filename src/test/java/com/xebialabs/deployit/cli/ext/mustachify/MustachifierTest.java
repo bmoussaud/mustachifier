@@ -24,7 +24,7 @@ import static com.google.common.base.Charsets.ISO_8859_1;
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.io.ByteStreams.toByteArray;
 import static com.xebialabs.deployit.cli.ext.mustachify.dar.DarReader.getEntry;
-import static org.apache.commons.io.FileUtils.deleteQuietly;
+import static com.xebialabs.deployit.cli.ext.mustachify.io.Files2.deleteOnExit;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -116,6 +116,6 @@ public class MustachifierTest {
     
     @After
     public void removeResult() {
-        deleteQuietly(result);
+        deleteOnExit(result);
     }
 }

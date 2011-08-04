@@ -22,10 +22,12 @@ package com.xebialabs.deployit.cli.ext.mustachify.io;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -37,6 +39,34 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 public class Files2 {
     private static final IOFileFilter TRUE = TrueFileFilter.INSTANCE;
     private static final IOFileFilter FALSE = FalseFileFilter.INSTANCE;
+    
+    public static boolean delete(@Nullable File file) {
+        if (file != null) {
+            return file.delete();
+        }
+        return false;
+    }
+    
+    public static void deleteOnExit(@Nullable File file) {
+        if (file != null) {
+            file.deleteOnExit();
+        }
+    }
+    
+    /**
+     * Returns the path to an (almost certainly) non-existent file in the default temporary 
+     * directory. The file itself is <em>not</em> created.
+     * 
+     * Due to the small possibility that another process claims the name before it can
+     * be used, callers may wish to check for existence using {@link File#exists()} to
+     * be sure.
+     */
+    public static String getTempFilePath(String basename, String ext) throws IOException {
+        File tempFile = File.createTempFile(basename, ext);
+        String tempFilePath = tempFile.getPath();
+        tempFile.delete();
+        return tempFilePath;
+    }
     
     public static @Nonnull Collection<File> listEntriesRecursively(@Nonnull File directory) {
         return listFiles(directory, TRUE, TRUE, true);
