@@ -48,7 +48,7 @@ import com.xebialabs.deployit.cli.ext.mustachify.dar.DarManifestParser.DarManife
 
 public class DarManifestParser implements Supplier<DarManifest> {
     private static final String PACKAGE_FORMAT_VERSION_ATTRIBUTE_NAME = "Deployit-Package-Format-Version";
-    private static final String SUPPORTED_PACKAGE_FORMAT_VERSION = "1.2";
+    private static final String SUPPORTED_PACKAGE_FORMAT_VERSION = "1.3";
     private static final String APPLICATION_ATTRIBUTE_NAME = "Ci-Application";
     private static final String VERSION_ATTRIBUTE_NAME = "Ci-Version";
     
