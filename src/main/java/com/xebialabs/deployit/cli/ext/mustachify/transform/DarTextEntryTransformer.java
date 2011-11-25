@@ -20,25 +20,16 @@
  */
 package com.xebialabs.deployit.cli.ext.mustachify.transform;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
+import javax.annotation.Nonnull;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.SortedMap;
 
-import javax.annotation.Nonnull;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * @author aphillips
@@ -78,7 +69,14 @@ public abstract class DarTextEntryTransformer extends DarEntryTransformer {
         }
         newEntryContents.flush();
     }
-    
-    protected abstract void transform(@Nonnull Reader entryContents, 
+
+	@Override
+	public String toString() {
+		return "DarTextEntryTransformer{" +
+				"encoding=" + encoding +
+				"} " + super.toString();
+	}
+
+	protected abstract void transform(@Nonnull Reader entryContents,
             @Nonnull Writer newEntryContents) throws IOException;
 }

@@ -20,10 +20,9 @@
  */
 package com.xebialabs.deployit.cli.ext.mustachify.transform;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author aphillips
@@ -70,5 +69,15 @@ public class RegexReplaceTransformer extends TextEntryAsStringTransformer {
             return new RegexReplaceTransformer(config);
         }
     }
+
+
+	@Override
+	public String toString() {
+		return "RegexReplaceTransformer{" +
+				"patternToFind=" + patternToFind +
+				", replacement='" + replacement + '\'' +
+				"} " + super.toString();
+	}
+
 
 }

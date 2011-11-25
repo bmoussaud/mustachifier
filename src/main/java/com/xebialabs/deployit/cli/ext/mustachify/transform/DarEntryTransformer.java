@@ -20,19 +20,18 @@
  */
 package com.xebialabs.deployit.cli.ext.mustachify.transform;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import com.google.common.collect.ImmutableMap;
+import com.xebialabs.deployit.cli.ext.mustachify.dar.DarManifestParser.DarManifest.DarManifestEntry;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.google.common.collect.ImmutableMap;
-import com.xebialabs.deployit.cli.ext.mustachify.dar.DarManifestParser.DarManifest.DarManifestEntry;
+import static com.google.common.base.Preconditions.checkArgument;
 
 
 /**
@@ -81,8 +80,18 @@ public abstract class DarEntryTransformer {
         return (entry.type.equalsIgnoreCase(typeToMatch)
                 && (pathIndependentMatch || entryPathPatternToMatch.matcher(entry.jarEntryPath).matches()));
     }
-    
-    /**
+
+
+	@Override
+	public String toString() {
+		return "DarEntryTransformer{" +
+				"entryPathPatternToMatch=" + entryPathPatternToMatch +
+				", pathIndependentMatch=" + pathIndependentMatch +
+				", typeToMatch='" + typeToMatch + '\'' +
+				'}';
+	}
+
+	/**
      * Streams can be used only during invocation of the method; any calls outside
      * may produce inconsistent results and/or result in exceptions.
      */
