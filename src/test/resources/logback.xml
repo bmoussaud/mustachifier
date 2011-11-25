@@ -1,0 +1,39 @@
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] {%mdc} %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>log/deployit.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>log/deployit.%i.log</fileNamePattern>
+			<minIndex>1</minIndex>
+			<maxIndex>5</maxIndex>
+		</rollingPolicy>
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>5MB</maxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] {%mdc} %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.xebialabs" level="info" />
+	<logger name="com.xebialabs.deployit.core.api.resteasy.http.tunnel.ResponseFactory" level="info" />
+	<logger name="com.xebialabs.deployit.core.api.resteasy.http.tunnel.TunneledResponseBuilder" level="info" />
+	<logger name="com.xebialabs.deployit.jetty.HttpHeaderOverrideServletRequest" level="info" />
+	<logger name="com.xebialabs.deployit.jetty.HttpMethodOverrideServletRequest" level="info" />
+	<logger name="net.schmizz.sshj" level="error" /> 
+	<logger name="com.xebialabs.deployit.cli.ext.mustachify" level="debug" /> 
+	<logger name="com.xebialabs.deployit.service.importer" level="debug" /> 
+
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>

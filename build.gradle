@@ -9,7 +9,7 @@ sourceCompatibility = 1.6
 sourceEncoding = 'UTF-8'
 
 cliVersion = '3.6.0'
-trueZipVersion = '7.0-rc2'
+trueZipVersion = '7.3.4'
 
 dependencies {
   compile("com.xebialabs.deployit:cli:${cliVersion}") {

@@ -20,15 +20,17 @@
  */
 package com.xebialabs.deployit.cli.ext.mustachify;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.Iterables.concat;
-import static com.google.common.collect.Iterables.transform;
-import static com.google.common.collect.Lists.newLinkedList;
-import static com.google.common.collect.Maps.transformValues;
-import static com.xebialabs.deployit.cli.ext.mustachify.collect.Maps2.reduce;
-import static org.apache.commons.io.FilenameUtils.getBaseName;
-import static org.apache.commons.io.FilenameUtils.getExtension;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableSet;
+import com.xebialabs.deployit.cli.ext.mustachify.dar.DarManifestParser.DarManifest.DarManifestEntry;
+import com.xebialabs.deployit.cli.ext.mustachify.io.TFiles;
+import com.xebialabs.deployit.cli.ext.mustachify.transform.DarEntryTransformer;
+import de.schlichtherle.truezip.file.TFile;
+import de.schlichtherle.truezip.file.TFileInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,29 +40,24 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableSet;
-import com.xebialabs.deployit.cli.ext.mustachify.dar.DarManifestParser.DarManifest.DarManifestEntry;
-import com.xebialabs.deployit.cli.ext.mustachify.io.TFiles;
-import com.xebialabs.deployit.cli.ext.mustachify.transform.DarEntryTransformer;
-
-import de.schlichtherle.truezip.file.TFile;
-import de.schlichtherle.truezip.file.TFileInputStream;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.Iterables.concat;
+import static com.google.common.collect.Iterables.transform;
+import static com.google.common.collect.Lists.newLinkedList;
+import static com.google.common.collect.Maps.transformValues;
+import static com.xebialabs.deployit.cli.ext.mustachify.collect.Maps2.reduce;
+import static org.apache.commons.io.FilenameUtils.getBaseName;
+import static org.apache.commons.io.FilenameUtils.getExtension;
 
 class DarEntryTransformerApplier {
     private static final Logger LOGGER = LoggerFactory.getLogger(DarEntryTransformerApplier.class);
-    
+
     Collection<TFile> apply(Map<DarEntry, DarEntryTransformer> entriesToTransform) {
-        Map<DarEntryTransformer, Iterable<TFile>> transformerWorkloads = 
+        Map<DarEntryTransformer, Iterable<TFile>> transformerWorkloads =
             transformValues(reduce(entriesToTransform), new ExpandDarEntries());
-        
+
         Collection<TFile> transformedFiles = newLinkedList();
-        for (Entry<DarEntryTransformer, Iterable<TFile>> transformerWorkload 
+        for (Entry<DarEntryTransformer, Iterable<TFile>> transformerWorkload
                 : transformerWorkloads.entrySet()) {
             // will force iteration of the iterable, but we're about to do that anyway
             Collection<TFile> filesToTransform = copyOf(transformerWorkload.getValue());
@@ -74,7 +71,7 @@ class DarEntryTransformerApplier {
         }
         return transformedFiles;
     }
-    
+
     private static void apply(DarEntryTransformer transformer, Iterable<TFile> filesToTransform) throws IOException {
         for (TFile fileToTransform : filesToTransform) {
             if (LOGGER.isDebugEnabled()) {
@@ -83,7 +80,7 @@ class DarEntryTransformerApplier {
             apply(transformer, fileToTransform);
         }
     }
-    
+
     // expand each DAR entry into a set of files and concatenate the results
     private static class ExpandDarEntries implements Function<Set<DarEntry>, Iterable<TFile>> {
         @Override
@@ -92,7 +89,7 @@ class DarEntryTransformerApplier {
                     @Override
                     public Iterable<TFile> apply(DarEntry entry) {
                         TFile entryContents = entry.contents;
-                        return entry.isFolder() ? TFiles.listTFiles(entryContents) 
+                        return entry.isFolder() ? TFiles.listTFiles(entryContents)
                                                 : ImmutableSet.of(entryContents);
                     }
                 }));
@@ -101,8 +98,13 @@ class DarEntryTransformerApplier {
 
     private static void apply(DarEntryTransformer transformer, TFile fileToTransform) throws IOException {
         String entryPath = fileToTransform.getInnerEntryName();
-        File newContentBuffer = 
-            File.createTempFile(getBaseName(entryPath), getExtension(entryPath));
+	    String baseName = getBaseName(entryPath);
+	    if (baseName == null || baseName.length()  < 3) {
+		    //handle file like .DSTORE
+		    baseName = "generatedBaseName";
+	    }
+	    File newContentBuffer =
+            File.createTempFile(baseName, getExtension(entryPath));
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Created temporary buffer '{}' for transformed content",
                     newContentBuffer);
@@ -139,16 +141,16 @@ class DarEntryTransformerApplier {
             newContentBuffer.delete();
         }
     }
-    
+
     static class DarEntry {
         public final DarManifestEntry metadata;
         public final TFile contents;
-        
+
         DarEntry(@Nonnull DarManifestEntry metadata, @Nonnull TFile contents) {
             this.metadata = metadata;
             this.contents = contents;
         }
-        
+
         public boolean isFolder() {
             // could add checks of the type, too
             return contents.isDirectory();
