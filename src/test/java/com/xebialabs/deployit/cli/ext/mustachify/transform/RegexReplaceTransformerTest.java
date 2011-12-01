@@ -46,8 +46,10 @@ public class RegexReplaceTransformerTest {
 
 	@Test
 	public void supportsMatchGroupReplacementBrackets() {
-		RegexReplaceTransformer transformer = get("\\[([^\\]]+)\\]", "\\{\\{$1\\}\\}");
+		RegexReplaceTransformer transformer = get("\\[([A-Z_\\]]+)\\]", "\\{\\{$1\\}\\}");
 		assertEquals("A {{DATX}} string", transformer.transform("A [DATX] string"));
+		assertEquals("A {{DATX_LOGIN_TEDI}} string", transformer.transform("A [DATX_LOGIN_TEDI] string"));
+		assertEquals("A [abc_edf] string", transformer.transform("A [abc_edf] string"));
 	}
 
 	private static RegexReplaceTransformer get(String patternToFind, String replacement) {
