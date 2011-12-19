@@ -52,6 +52,16 @@ public class RegexReplaceTransformerTest {
 		assertEquals("A [abc_edf] string", transformer.transform("A [abc_edf] string"));
 	}
 
+	@Test
+	public void supportsMatchGroupReplacementMineducFormat() {
+		RegexReplaceTransformer transformer = get("ZZ_([A-Z_]+)", "\\{\\{$1\\}\\}");
+		assertEquals("A {{HOME}} string", transformer.transform("A ZZ_HOME string"));
+		assertEquals("A {{SCONET_HOME}} string", transformer.transform("A ZZ_SCONET_HOME string"));
+		assertEquals("LDAP_URL=ldap://{{LDAPSRV_IP}}:{{LDAPSRV_PORT}}/", transformer.transform("LDAP_URL=ldap://ZZ_LDAPSRV_IP:ZZ_LDAPSRV_PORT/"));
+	}
+
+
+
 	private static RegexReplaceTransformer get(String patternToFind, String replacement) {
 		return new RegexReplaceTransformer(ImmutableMap.of(
 				"type", RegexReplaceTransformerFactory.TRANSFORMER_TYPE,

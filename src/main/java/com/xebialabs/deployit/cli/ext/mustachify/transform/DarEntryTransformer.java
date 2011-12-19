@@ -25,6 +25,7 @@ import com.xebialabs.deployit.cli.ext.mustachify.dar.DarManifestParser.DarManife
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -97,8 +98,12 @@ public abstract class DarEntryTransformer {
      */
     public abstract void transform(@Nonnull InputStream entryContents, 
             @Nonnull OutputStream newEntryContents) throws IOException ;
-    
-    public static interface TransformerFactory {
+
+	public  boolean canApply(File filesToTransform) {
+		return true;
+	}
+
+	public static interface TransformerFactory {
         @Nonnull String getTransformerType();
         @Nonnull DarEntryTransformer from(@Nonnull Map<String, String> config);
     }
