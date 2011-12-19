@@ -37,6 +37,7 @@ transform.N.ci.path.pattern=<see above> (optional)
 transform.N.encoding=<encoding of the source file(s) matched, e.g. 'ISO-8859-1'>
 transform.N.find=<the string to find, e.g. 'foo'>
 transform.N.replacement=<the string to use as a replacement, e.g. 'bar'>
+transform.N.textFileNamesRegex=<Regular expression that matches file names of text files, default is .+\.(cfg | conf | config | ini | properties | props | txt | xml )>
 
 The format for a 'regex-replace' transform is:
 
@@ -46,6 +47,7 @@ transform.N.ci.path.pattern=<see above> (optional)
 transform.N.encoding=<encoding of the source file(s) matched, e.g. 'ISO-8859-1'>
 transform.N.pattern=<the pattern to find, e.g. '\\$(\\{[^\\}]+\\})'. Uses the Java regular expression syntax, so special characters should be escaped using *double* backslashes, e.g. '\\$' for a dollar sign. Parts of the pattern may be captured as matching groups>
 transform.N.replacement=<the string to use as a replacement, e.g. '\\{$1\\}'. Matching groups from the pattern match may be used. Again, uses the Java regular expression syntax>
+transform.N.textFileNamesRegex=<Regular expression that matches file names of text files, default is .+\.(cfg | conf | config | ini | properties | props | txt | xml )>
 
 Examples
 --------
